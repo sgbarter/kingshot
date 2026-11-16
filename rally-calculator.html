@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>[RDX]RoadKill – Bear Trap March Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #E9ECF1;
+    --surface: #FFFFFF;
+    --ink: #1B2233;
+    --muted: #4E5870;
+    --line: #C9CFDA;
+    --banner: #1E2A44;
+    --banner-ink: #F3E7C2;
+    --gold: #8A6A10;
+    --inf: #3F6AA8;
+    --cav: #A83545;
+    --arc: #2F7446;
+    --track: #DDE2EA;
+    --ok-ink: #22603A;
+    --warn-bg: #FCEFD9;
+    --warn-ink: #6B4400;
+    --err-bg: #FBE3E5;
+    --err-ink: #8A1F2D;
+    --focus: #C9A227;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12161F;
+      --surface: #1B2130;
+      --ink: #E7EAF0;
+      --muted: #A9B1C2;
+      --line: #343D52;
+      --banner: #0C1222;
+      --banner-ink: #EBD9A2;
+      --gold: #D8B54A;
+      --inf: #7FA6E0;
+      --cav: #E57C8A;
+      --arc: #6CC08A;
+      --track: #2A3142;
+      --ok-ink: #8FD6A8;
+      --warn-bg: #3A2E14;
+      --warn-ink: #F2D9A0;
+      --err-bg: #3D1C22;
+      --err-ink: #F5B8C0;
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+  }
+  header {
+    background: var(--banner);
+    color: var(--banner-ink);
+    padding: 2rem 1.25rem 1.75rem;
+    border-bottom: 4px solid var(--focus);
+  }
+  header .wrap { max-width: 1040px; margin: 0 auto; }
+  h1 {
+    font-family: "Cinzel", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    font-size: clamp(1.75rem, 4vw, 2.6rem);
+    letter-spacing: 0.02em;
+    margin: 0 0 0.35rem;
+    line-height: 1.15;
+  }
+  header p { margin: 0; max-width: 64ch; opacity: 0.9; }
+  header p.alliance {
+    font-family: "Cinzel", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+    letter-spacing: 0.04em;
+    color: var(--focus);
+    opacity: 1;
+    margin: 0 0 0.2rem;
+  }
+  main { max-width: 1040px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; display: grid; gap: 1.25rem; }
+  .top { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
+  @media (min-width: 820px) { .top { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); } }
+  section {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1.25rem;
+    min-width: 0;
+  }
+  h2 {
+    font-family: "Cinzel", Georgia, serif;
+    font-size: 1.2rem;
+    margin: 0 0 0.85rem;
+    letter-spacing: 0.02em;
+  }
+  h3 { font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+  fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }
+  fieldset:last-child { margin-bottom: 0; }
+  legend { font-weight: 700; margin-bottom: 0.5rem; padding: 0; }
+  .row {
+    display: grid;
+    grid-template-columns: 7.5rem minmax(0, 1fr);
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .row label { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; }
+  .swatch { width: 0.85rem; height: 0.85rem; border-radius: 2px; flex: none; display: inline-block; }
+  .sw-inf { background: var(--inf); } .sw-cav { background: var(--cav); } .sw-arc { background: var(--arc); }
+  input[type="text"], select {
+    width: 100%;
+    font: inherit;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.5rem 0.65rem;
+    font-variant-numeric: tabular-nums;
+  }
+  select { width: auto; min-width: 5rem; }
+  .hint { color: var(--muted); font-size: 0.95rem; margin: 0.25rem 0 0; }
+  button {
+    font: inherit;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--ink);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.35rem 0.7rem;
+    cursor: pointer;
+  }
+  button:hover { border-color: var(--muted); }
+  :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+  .ratio-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.25rem; margin-bottom: 0.9rem; }
+  .ratio-controls label { font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+  .presets { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
+  .presets span { color: var(--muted); font-size: 0.95rem; margin-right: 0.2rem; }
+
+  .table-scroll { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { text-align: right; padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--line); white-space: nowrap; vertical-align: middle; }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+  thead th .swatch { margin-right: 0.35rem; vertical-align: -1px; }
+  tbody th { font-weight: 600; text-align: left; }
+  tfoot td, tfoot th { font-weight: 700; }
+  tfoot tr:last-child td, tfoot tr:last-child th { border-bottom: 0; }
+  .ratio-table input { width: 5.25rem; text-align: right; padding: 0.4rem 0.5rem; }
+  .ratio-table td.sumcell { font-weight: 600; }
+  .ratio-table td.sumcell.bad { color: var(--err-ink); }
+  .status-ok { color: var(--ok-ink); font-weight: 600; }
+  .status-bad { color: var(--err-ink); font-weight: 600; }
+  .status-skip { color: var(--muted); }
+
+  .verdict { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.25rem; }
+  .verdict .num {
+    font-family: "Cinzel", Georgia, serif;
+    font-size: clamp(3rem, 9vw, 4.5rem);
+    line-height: 1;
+    color: var(--gold);
+  }
+  .verdict .what { font-size: 1.15rem; font-weight: 600; }
+  .note { border-radius: 4px; padding: 0.6rem 0.8rem; margin: 0.75rem 0 0; }
+  .note.warn { background: var(--warn-bg); color: var(--warn-ink); }
+  .note.err { background: var(--err-bg); color: var(--err-ink); }
+
+  .pools { margin-top: 0.5rem; }
+  .pool { margin-bottom: 0.9rem; }
+  .pool-head { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.95rem; flex-wrap: wrap; }
+  .pool-head strong { display: flex; align-items: center; gap: 0.45rem; }
+  .limit-tag { font-weight: 700; color: var(--err-ink); }
+  .bar {
+    height: 1.6rem;
+    background: var(--track);
+    border-radius: 3px;
+    overflow: hidden;
+    display: flex;
+    margin-top: 0.25rem;
+  }
+  .seg { height: 100%; border-right: 2px solid var(--surface); flex: none; }
+  .seg.inf { background: var(--inf); } .seg.cav { background: var(--cav); } .seg.arc { background: var(--arc); }
+
+  footer { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem 2rem; color: var(--muted); font-size: 0.9rem; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  @media (prefers-reduced-motion: no-preference) { .seg { transition: width 0.2s ease; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <p class="alliance">[RDX]RoadKill</p>
+    <h1>Bear Trap March Planner</h1>
+    <p>Enter your troops and march size, choose how many marches you're sending, and set the ratio for each one. See which marches you can fill and where you come up short.</p>
+  </div>
+</header>
+
+<main>
+  <div class="top">
+    <section aria-labelledby="in-h">
+      <h2 id="in-h">Your troops</h2>
+      <fieldset>
+        <legend>Total troops available</legend>
+        <div class="row">
+          <label for="t-inf"><span class="swatch sw-inf" aria-hidden="true"></span>Infantry</label>
+          <input type="text" inputmode="numeric" id="t-inf" value="60,000" autocomplete="off">
+        </div>
+        <div class="row">
+          <label for="t-cav"><span class="swatch sw-cav" aria-hidden="true"></span>Cavalry</label>
+          <input type="text" inputmode="numeric" id="t-cav" value="55,000" autocomplete="off">
+        </div>
+        <div class="row">
+          <label for="t-arc"><span class="swatch sw-arc" aria-hidden="true"></span>Archers</label>
+          <input type="text" inputmode="numeric" id="t-arc" value="180,000" autocomplete="off">
+        </div>
+        <p class="hint">Count only troops at home and available to march. Commas are fine.</p>
+      </fieldset>
+      <fieldset>
+        <legend>March size</legend>
+        <div class="row">
+          <label for="m-size">Troops</label>
+          <input type="text" inputmode="numeric" id="m-size" value="60,000" autocomplete="off" aria-describedby="m-size-hint">
+        </div>
+        <p class="hint" id="m-size-hint">Troops per march, including any capacity bonuses.</p>
+      </fieldset>
+    </section>
+
+    <section aria-labelledby="out-h">
+      <h2 id="out-h">Result</h2>
+      <div id="result" aria-live="polite"></div>
+      <h3>Troop pools</h3>
+      <p class="hint" style="margin-top:0">Each block is one march's share of that troop type. A bar that's nearly full is the type holding you back.</p>
+      <div class="pools" id="pools"></div>
+    </section>
+  </div>
+
+  <section aria-labelledby="ratio-h">
+    <h2 id="ratio-h">March ratios</h2>
+    <div class="ratio-controls">
+      <label for="m-count">Number of marches
+        <select id="m-count"></select>
+      </label>
+      <div class="presets" role="group" aria-label="Apply a ratio to all marches">
+        <span>Apply to all:</span>
+        <button type="button" data-p="10,10,80">10 / 10 / 80</button>
+        <button type="button" data-p="1,10,89">1 / 10 / 89</button>
+        <button type="button" data-p="15,15,70">15 / 15 / 70</button>
+        <button type="button" data-p="25,25,50">25 / 25 / 50</button>
+      </div>
+    </div>
+    <p class="hint" style="margin:0 0 0.75rem">Marches are filled in order, so put the ones that matter most at the top.</p>
+    <div class="table-scroll">
+      <table class="ratio-table">
+        <caption class="sr-only">Ratio and troops for each march</caption>
+        <thead>
+          <tr>
+            <th scope="col">March</th>
+            <th scope="col"><span class="swatch sw-inf" aria-hidden="true"></span>Infantry %</th>
+            <th scope="col"><span class="swatch sw-cav" aria-hidden="true"></span>Cavalry %</th>
+            <th scope="col"><span class="swatch sw-arc" aria-hidden="true"></span>Archers %</th>
+            <th scope="col">Total</th>
+            <th scope="col">Infantry</th>
+            <th scope="col">Cavalry</th>
+            <th scope="col">Archers</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody id="ratio-body"></tbody>
+        <tfoot id="ratio-foot"></tfoot>
+      </table>
+    </div>
+  </section>
+</main>
+<footer>
+  <p>Troop counts are rounded to whole troops so each march adds up to exactly your march size. This tool only does the troop math; it does not estimate damage.</p>
+</footer>
+
+<script>
+(function () {
+  var TYPES = [
+    { key: "inf", name: "Infantry" },
+    { key: "cav", name: "Cavalry" },
+    { key: "arc", name: "Archers" }
+  ];
+  var MAX_MARCHES = 10;
+  var $ = function (id) { return document.getElementById(id); };
+  var fmt = function (n) { return Math.round(n).toLocaleString("en-US"); };
+
+  // Ratio state for every possible march, so values survive changing the count.
+  var ratios = [];
+  for (var r = 0; r < MAX_MARCHES; r++) ratios.push(["10", "10", "80"]);
+
+  function parseNum(str, allowDecimal) {
+    var raw = String(str).replace(/[^0-9.]/g, "");
+    var v = allowDecimal ? parseFloat(raw) : Math.floor(parseFloat(raw));
+    return isFinite(v) && v > 0 ? v : 0;
+  }
+  function num(id) { return parseNum($(id).value, false); }
+
+  // Split a march size into whole troops by percentage (largest remainder), summing exactly to size.
+  function split(size, pcts) {
+    var total = pcts[0] + pcts[1] + pcts[2];
+    if (total <= 0) return [0, 0, 0];
+    var raw = pcts.map(function (p) { return size * p / total; });
+    var out = raw.map(Math.floor);
+    var rem = size - (out[0] + out[1] + out[2]);
+    var order = raw.map(function (v, i) { return { i: i, f: v - Math.floor(v) }; })
+      .filter(function (o) { return pcts[o.i] > 0; })
+      .sort(function (a, b) { return b.f - a.f; });
+    for (var k = 0; k < rem && order.length; k++) out[order[k % order.length].i]++;
+    return out;
+  }
+
+  // Largest single march size where every listed march (at its own ratio) fits in the pools together.
+  function maxCommonSize(pctList, have) {
+    var s = Infinity;
+    for (var t = 0; t < 3; t++) {
+      var share = 0;
+      pctList.forEach(function (p) { share += p[t] / 100; });
+      if (share > 0) s = Math.min(s, Math.floor(have[t] / share));
+    }
+    if (!isFinite(s)) return 0;
+    while (s > 0) {
+      var need = [0, 0, 0];
+      pctList.forEach(function (p) { var c = split(s, p); need[0] += c[0]; need[1] += c[1]; need[2] += c[2]; });
+      if (need[0] <= have[0] && need[1] <= have[1] && need[2] <= have[2]) break;
+      s--;
+    }
+    return s;
+  }
+
+  function buildCountSelect() {
+    var sel = $("m-count");
+    for (var i = 1; i <= MAX_MARCHES; i++) {
+      var o = document.createElement("option");
+      o.value = i; o.textContent = i;
+      if (i === 4) o.selected = true;
+      sel.appendChild(o);
+    }
+  }
+
+  function buildRows() {
+    var n = parseInt($("m-count").value, 10);
+    var body = "";
+    for (var i = 0; i < n; i++) {
+      body += "<tr><th scope=\"row\">March " + (i + 1) + "</th>";
+      TYPES.forEach(function (t, k) {
+        body += '<td><input type="text" inputmode="decimal" autocomplete="off" data-row="' + i + '" data-col="' + k +
+          '" value="' + ratios[i][k] + '" aria-label="March ' + (i + 1) + " " + t.name.toLowerCase() + ' percent"></td>';
+      });
+      body += '<td class="sumcell" id="sum-' + i + '"></td>';
+      body += '<td id="c-' + i + '-0"></td><td id="c-' + i + '-1"></td><td id="c-' + i + '-2"></td>';
+      body += '<td id="st-' + i + '"></td></tr>';
+    }
+    $("ratio-body").innerHTML = body;
+    $("ratio-body").querySelectorAll("input").forEach(function (el) {
+      el.addEventListener("input", function () {
+        ratios[+el.dataset.row][+el.dataset.col] = el.value;
+        render();
+      });
+    });
+    render();
+  }
+
+  function render() {
+    var have = [num("t-inf"), num("t-cav"), num("t-arc")];
+    var size = num("m-size");
+    var n = parseInt($("m-count").value, 10);
+
+    var remaining = have.slice();
+    var used = [0, 0, 0];
+    var demand = [0, 0, 0];
+    var sent = 0, invalid = 0;
+    var sentPer = [];           // per-type counts of marches that were sent, for the bars
+    var validPcts = [];
+    var failTypes = [0, 0, 0];
+
+    for (var i = 0; i < n; i++) {
+      var p = ratios[i].map(function (v) { return parseNum(v, true); });
+      var total = Math.round((p[0] + p[1] + p[2]) * 100) / 100;
+      var ok = Math.abs(total - 100) < 0.001;
+      var sumEl = $("sum-" + i);
+      sumEl.textContent = total + "%";
+      sumEl.className = "sumcell" + (ok ? "" : " bad");
+      var st = $("st-" + i);
+
+      if (!ok || size <= 0) {
+        for (var k = 0; k < 3; k++) $("c-" + i + "-" + k).textContent = "–";
+        st.innerHTML = '<span class="status-skip">' + (!ok ? "Fix ratio" : "Set march size") + "</span>";
+        if (!ok) invalid++;
+        continue;
+      }
+      validPcts.push(p);
+      var c = split(size, p);
+      for (var t = 0; t < 3; t++) { $("c-" + i + "-" + t).textContent = fmt(c[t]); demand[t] += c[t]; }
+
+      var short = [];
+      for (t = 0; t < 3; t++) if (c[t] > remaining[t]) short.push(t);
+      if (short.length === 0) {
+        for (t = 0; t < 3; t++) { remaining[t] -= c[t]; used[t] += c[t]; }
+        sent++;
+        sentPer.push(c);
+        st.innerHTML = '<span class="status-ok">Can send</span>';
+      } else {
+        short.forEach(function (t) { failTypes[t]++; });
+        st.innerHTML = '<span class="status-bad">Short ' + short.map(function (t) {
+          return fmt(c[t] - remaining[t]) + " " + TYPES[t].name.toLowerCase();
+        }).join(", ") + "</span>";
+      }
+    }
+
+    // Footer totals
+    var foot = "<tr><th scope=\"row\" colspan=\"5\">Needed for all marches</th>" +
+      demand.map(function (d) { return "<td>" + fmt(d) + "</td>"; }).join("") + "<td></td></tr>";
+    foot += "<tr><th scope=\"row\" colspan=\"5\">You have</th>" +
+      have.map(function (h) { return "<td>" + fmt(h) + "</td>"; }).join("") + "<td></td></tr>";
+    foot += "<tr><th scope=\"row\" colspan=\"5\">Left after marches you can send</th>" +
+      remaining.map(function (x) { return "<td>" + fmt(x) + "</td>"; }).join("") + "<td></td></tr>";
+    $("ratio-foot").innerHTML = foot;
+
+    // Result panel
+    var result = $("result");
+    if (size <= 0) {
+      result.innerHTML = '<p class="note err">Enter a march size to see which marches you can send.</p>';
+      $("pools").innerHTML = "";
+      return;
+    }
+    var html = '<div class="verdict"><span class="num">' + sent + " of " + n + '</span><span class="what">march' +
+      (n === 1 ? "" : "es") + " of " + fmt(size) + " troops can be sent</span></div>";
+
+    if (invalid > 0) {
+      html += '<p class="note err">' + invalid + " march" + (invalid === 1 ? " has" : "es have") +
+        " a ratio that doesn't add up to 100%. Fix " + (invalid === 1 ? "it" : "them") + " in the March ratios table.</p>";
+    }
+
+    var shortAll = demand.map(function (d, t) { return Math.max(0, d - have[t]); });
+    var shortTxt = shortAll.map(function (s, t) { return s > 0 ? fmt(s) + " more " + TYPES[t].name.toLowerCase() : null; })
+      .filter(Boolean).join(" and ");
+    if (validPcts.length > 0 && shortTxt) {
+      html += "<p>To send every march at these ratios you'd need " + shortTxt + ".</p>";
+      var best = maxCommonSize(validPcts, have);
+      if (best > 0) {
+        html += '<p class="note warn">Or keep your ratios and shrink every march to <strong>' + fmt(best) +
+          "</strong> troops, and all " + validPcts.length + " will fit.</p>";
+      } else {
+        html += '<p class="note warn">You don\'t have enough troops to send all of these marches at any size with these ratios.</p>';
+      }
+    } else if (validPcts.length > 0 && invalid === 0) {
+      html += "<p>Every march fits with troops to spare.</p>";
+    }
+    result.innerHTML = html;
+
+    // Pool bars
+    var limitT = -1, tightest = -1;
+    for (var t2 = 0; t2 < 3; t2++) {
+      if (have[t2] > 0 && demand[t2] > 0) {
+        var ratio = demand[t2] / have[t2];
+        if (ratio > tightest) { tightest = ratio; limitT = t2; }
+      }
+    }
+    var pools = "";
+    TYPES.forEach(function (t, k) {
+      var isLimit = k === limitT && validPcts.length > 0;
+      pools += '<div class="pool"><div class="pool-head"><strong><span class="swatch sw-' + t.key +
+        '" aria-hidden="true"></span>' + t.name + (isLimit ? ' <span class="limit-tag">(tightest)</span>' : "") +
+        "</strong><span>" + fmt(used[k]) + " of " + fmt(have[k]) + " used</span></div>";
+      pools += '<div class="bar" role="img" aria-label="' + t.name + ": " + fmt(used[k]) + " of " + fmt(have[k]) + ' used">';
+      if (have[k] > 0) {
+        sentPer.forEach(function (c) {
+          if (c[k] > 0) pools += '<span class="seg ' + t.key + '" style="width:' + (c[k] / have[k]) * 100 + '%"></span>';
+        });
+      }
+      pools += "</div></div>";
+    });
+    $("pools").innerHTML = pools;
+  }
+
+  buildCountSelect();
+  $("m-count").addEventListener("change", buildRows);
+  ["t-inf", "t-cav", "t-arc", "m-size"].forEach(function (id) { $(id).addEventListener("input", render); });
+  document.querySelectorAll(".presets button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var p = b.getAttribute("data-p").split(",");
+      for (var i = 0; i < MAX_MARCHES; i++) ratios[i] = p.slice();
+      buildRows();
+    });
+  });
+  buildRows();
+})();
+</script>
+</body>
+</html>
