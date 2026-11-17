@@ -4,52 +4,64 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>[RDK]RoadKill – Bear Trap March Planner</title>
+<script>
+  try { if (localStorage.getItem("rdk-bear-trap-theme") === "light") document.documentElement.setAttribute("data-theme", "light"); } catch (e) {}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
+    --bg: #10141C;
+    --surface: #1A202D;
+    --surface-2: #222938;
+    --ink: #E7EAF0;
+    --muted: #A9B1C2;
+    --line: #333C50;
+    --banner: #0B1020;
+    --banner-ink: #EBD9A2;
+    --gold: #D8B54A;
+    --crest-gold: #C9A227;
+    --inf: #7FA6E0;
+    --cav: #E57C8A;
+    --arc: #6CC08A;
+    --track: #2A3142;
+    --ok-ink: #8FD6A8;
+    --info-bg: #1C2A44;
+    --info-ink: #C4D6F5;
+    --warn-bg: #3A2E14;
+    --warn-ink: #F2D9A0;
+    --err-bg: #3D1C22;
+    --err-ink: #F5B8C0;
+    --tok-ink: #1B2233;
+    --focus: #E0BC45;
+    color-scheme: dark;
+  }
+  :root[data-theme="light"] {
     --bg: #E9ECF1;
     --surface: #FFFFFF;
+    --surface-2: #F4F6F9;
     --ink: #1B2233;
     --muted: #4E5870;
     --line: #C9CFDA;
     --banner: #1E2A44;
     --banner-ink: #F3E7C2;
     --gold: #8A6A10;
+    --crest-gold: #C9A227;
     --inf: #3F6AA8;
     --cav: #A83545;
     --arc: #2F7446;
     --track: #DDE2EA;
     --ok-ink: #22603A;
+    --info-bg: #E3EBF7;
+    --info-ink: #1E3A66;
     --warn-bg: #FCEFD9;
     --warn-ink: #6B4400;
     --err-bg: #FBE3E5;
     --err-ink: #8A1F2D;
-    --focus: #C9A227;
+    --tok-ink: #1B2233;
+    --focus: #8A6A10;
     color-scheme: light;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #12161F;
-      --surface: #1B2130;
-      --ink: #E7EAF0;
-      --muted: #A9B1C2;
-      --line: #343D52;
-      --banner: #0C1222;
-      --banner-ink: #EBD9A2;
-      --gold: #D8B54A;
-      --inf: #7FA6E0;
-      --cav: #E57C8A;
-      --arc: #6CC08A;
-      --track: #2A3142;
-      --ok-ink: #8FD6A8;
-      --warn-bg: #3A2E14;
-      --warn-ink: #F2D9A0;
-      --err-bg: #3D1C22;
-      --err-ink: #F5B8C0;
-      color-scheme: dark;
-    }
   }
   * { box-sizing: border-box; }
   body {
@@ -61,12 +73,40 @@
     line-height: 1.5;
   }
   header {
-    background: var(--banner);
+    background-color: var(--banner);
+    background-image:
+      radial-gradient(120% 140% at 0% 0%, rgba(201, 162, 39, 0.16), transparent 55%),
+      repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.035) 0 2px, transparent 2px 9px),
+      repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.18) 0 2px, transparent 2px 9px);
     color: var(--banner-ink);
-    padding: 2rem 1.25rem 1.75rem;
-    border-bottom: 4px solid var(--focus);
+    padding: 1.75rem 1.25rem 1.6rem;
+    border-bottom: 4px solid var(--crest-gold);
   }
-  header .wrap { max-width: 1040px; margin: 0 auto; }
+  header .wrap { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; gap: 1.25rem; }
+  .head-text { flex: 1; min-width: 0; }
+  .crest { width: clamp(4rem, 11vw, 6rem); height: auto; flex: none; filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.45)); }
+  .theme-btn {
+    align-self: flex-start; flex: none;
+    background: transparent; color: var(--banner-ink);
+    border-color: rgba(235, 217, 162, 0.45);
+  }
+  .theme-btn:hover:not(:disabled) { border-color: var(--banner-ink); }
+  @media (max-width: 560px) {
+    header .wrap { flex-wrap: wrap; gap: 0.75rem; }
+    .crest { width: 3.75rem; }
+    .theme-btn { margin-left: auto; }
+    .head-text { order: 2; flex-basis: 100%; }
+  }
+  header p { margin: 0; max-width: 66ch; opacity: 0.9; }
+  header p.alliance {
+    font-family: "Cinzel", Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+    letter-spacing: 0.04em;
+    color: var(--crest-gold);
+    opacity: 1;
+    margin: 0 0 0.2rem;
+  }
   h1 {
     font-family: "Cinzel", Georgia, "Times New Roman", serif;
     font-weight: 700;
@@ -75,25 +115,17 @@
     margin: 0 0 0.35rem;
     line-height: 1.15;
   }
-  header p { margin: 0; max-width: 64ch; opacity: 0.9; }
-  header p.alliance {
-    font-family: "Cinzel", Georgia, "Times New Roman", serif;
-    font-weight: 700;
-    font-size: clamp(1.15rem, 2.6vw, 1.5rem);
-    letter-spacing: 0.04em;
-    color: var(--focus);
-    opacity: 1;
-    margin: 0 0 0.2rem;
-  }
-  main { max-width: 1040px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; display: grid; gap: 1.25rem; }
+  main { max-width: 1120px; margin: 0 auto; padding: 1.5rem 1.25rem 3rem; display: grid; gap: 1.25rem; }
   .top { display: grid; gap: 1.25rem; grid-template-columns: minmax(0, 1fr); }
-  @media (min-width: 820px) { .top { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); } }
+  @media (min-width: 860px) { .top { grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); } }
   section {
     background: var(--surface);
     border: 1px solid var(--line);
+    border-top: 3px solid var(--crest-gold);
     border-radius: 6px;
     padding: 1.25rem;
     min-width: 0;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   }
   h2 {
     font-family: "Cinzel", Georgia, serif;
@@ -101,20 +133,21 @@
     margin: 0 0 0.85rem;
     letter-spacing: 0.02em;
   }
-  h3 { font-size: 1rem; margin: 1.25rem 0 0.5rem; }
+  h3 { font-size: 1rem; margin: 1.4rem 0 0.5rem; }
   fieldset { border: 0; padding: 0; margin: 0 0 1.25rem; min-width: 0; }
-  fieldset:last-child { margin-bottom: 0; }
   legend { font-weight: 700; margin-bottom: 0.5rem; padding: 0; }
   .row {
     display: grid;
     grid-template-columns: 7.5rem minmax(0, 1fr);
-    align-items: center;
-    gap: 0.5rem 0.75rem;
-    margin-bottom: 0.5rem;
+    align-items: start;
+    gap: 0.25rem 0.75rem;
+    margin-bottom: 0.55rem;
   }
-  .row label { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; }
-  .swatch { width: 0.85rem; height: 0.85rem; border-radius: 2px; flex: none; display: inline-block; }
-  .sw-inf { background: var(--inf); } .sw-cav { background: var(--cav); } .sw-arc { background: var(--arc); }
+  .row > label { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; padding-top: 0.5rem; }
+  .parsed { display: block; font-size: 0.9rem; color: var(--muted); min-height: 0; }
+  .parsed.bad { color: var(--err-ink); }
+  .ticon { width: 1.15rem; height: 1.15rem; flex: none; display: inline-block; vertical-align: -3px; }
+  .t-inf { color: var(--inf); } .t-cav { color: var(--cav); } .t-arc { color: var(--arc); }
   input[type="text"], select {
     width: 100%;
     font: inherit;
@@ -125,6 +158,8 @@
     padding: 0.5rem 0.65rem;
     font-variant-numeric: tabular-nums;
   }
+  input[aria-invalid="true"] { border-color: var(--err-ink); box-shadow: inset 0 0 0 1px var(--err-ink); }
+  input[readonly] { background: var(--track); color: var(--ink); }
   select { width: auto; min-width: 5rem; }
   .hint { color: var(--muted); font-size: 0.95rem; margin: 0.25rem 0 0; }
   button {
@@ -135,33 +170,98 @@
     background: var(--bg);
     border: 1px solid var(--line);
     border-radius: 4px;
-    padding: 0.35rem 0.7rem;
+    padding: 0.4rem 0.75rem;
+    min-height: 2.25rem;
     cursor: pointer;
   }
-  button:hover { border-color: var(--muted); }
+  button:hover:not(:disabled) { border-color: var(--muted); }
+  button:disabled { opacity: 0.45; cursor: default; }
+  button.primary { background: var(--crest-gold); color: var(--tok-ink); border-color: var(--crest-gold); }
+  button.primary:hover:not(:disabled) { border-color: var(--ink); }
   :focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
 
-  .ratio-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem 1.25rem; margin-bottom: 0.9rem; }
-  .ratio-controls label { font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
+  .savebar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem; border-top: 1px solid var(--line); padding-top: 0.9rem; margin-top: 0.25rem; }
+  .savebar p { margin: 0; }
+
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; margin-bottom: 0.75rem; }
+  .controls label { font-weight: 600; display: flex; align-items: center; gap: 0.5rem; }
   .presets { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; }
-  .presets span { color: var(--muted); font-size: 0.95rem; margin-right: 0.2rem; }
+  .presets > span { color: var(--muted); font-size: 0.95rem; margin-right: 0.2rem; }
+  .share { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-left: auto; }
+  .status-msg { font-size: 0.95rem; color: var(--ok-ink); font-weight: 600; }
+
+  .plan-banner {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem 1rem;
+    background: var(--info-bg); color: var(--info-ink);
+    border-radius: 4px; padding: 0.65rem 0.85rem; margin-bottom: 0.9rem;
+  }
+  .plan-banner p { margin: 0; }
 
   .table-scroll { overflow-x: auto; }
   table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
-  th, td { text-align: right; padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--line); white-space: nowrap; vertical-align: middle; }
+  th, td { text-align: right; padding: 0.45rem 0.4rem; border-bottom: 1px solid var(--line); white-space: nowrap; vertical-align: middle; }
   th:first-child, td:first-child { text-align: left; }
-  thead th { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
-  thead th .swatch { margin-right: 0.35rem; vertical-align: -1px; }
-  tbody th { font-weight: 600; text-align: left; }
-  tfoot td, tfoot th { font-weight: 700; }
-  tfoot tr:last-child td, tfoot tr:last-child th { border-bottom: 0; }
-  .ratio-table input { width: 5.25rem; text-align: right; padding: 0.4rem 0.5rem; }
-  .ratio-table td.sumcell { font-weight: 600; }
-  .ratio-table td.sumcell.bad { color: var(--err-ink); }
+  thead th { font-size: 0.88rem; color: var(--muted); font-weight: 600; }
+  thead th .ticon { margin-right: 0.3rem; }
+  .march-table input { padding: 0.4rem 0.5rem; }
+  .march-table th, .march-table td { padding-left: 0.3rem; padding-right: 0.3rem; }
+  .march-table .c-name input { width: 8.5rem; }
+  .march-table .c-pct input { width: 4rem; text-align: right; }
+  .march-table .c-size input { width: 6.5rem; text-align: right; }
+  .march-table .c-status { white-space: normal; min-width: 8rem; text-align: left; }
+  .c-actions { text-align: right; }
+  .icon-btns { display: inline-flex; gap: 0.25rem; }
+  .icon-btn { min-width: 2.25rem; padding: 0.2rem 0.4rem; font-size: 1rem; line-height: 1; }
+  .locked .c-actions, .locked .h-actions { display: none; }
+  .march-table tbody td:first-child { box-shadow: inset 4px 0 0 var(--line); padding-left: 0.75rem; }
+  .march-table tr.row-ok td:first-child { box-shadow: inset 4px 0 0 var(--ok-ink); }
+  .march-table tr.row-short td:first-child { box-shadow: inset 4px 0 0 var(--err-ink); }
+  .rbar { display: flex; height: 0.4rem; margin-top: 0.35rem; border-radius: 2px; overflow: hidden; background: var(--track); }
+  .rbar span { height: 100%; width: 0; }
+  .rbar .inf { background: var(--inf); } .rbar .cav { background: var(--cav); } .rbar .arc { background: var(--arc); }
   .status-ok { color: var(--ok-ink); font-weight: 600; }
   .status-bad { color: var(--err-ink); font-weight: 600; }
   .status-skip { color: var(--muted); }
 
+  /* Phone layout: each march becomes a card */
+  @media (max-width: 760px) {
+    .march-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .march-table, .march-table tbody { display: block; }
+    .march-table tr {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.6rem 0.75rem;
+      border: 1px solid var(--line);
+      border-left: 5px solid var(--line);
+      border-radius: 6px;
+      padding: 0.85rem;
+      margin-bottom: 0.85rem;
+      background: var(--surface-2);
+    }
+    .march-table tr.row-ok { border-left-color: var(--ok-ink); }
+    .march-table tr.row-short { border-left-color: var(--err-ink); }
+    .march-table tbody td:first-child, .march-table tr.row-ok td:first-child, .march-table tr.row-short td:first-child { box-shadow: none; padding-left: 0; }
+    .march-table td { display: flex; flex-direction: column; gap: 0.15rem; border: 0; padding: 0; text-align: left; white-space: normal; }
+    .march-table td::before { content: attr(data-label); font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+    .march-table .c-name, .march-table .c-size, .march-table .c-status, .march-table .c-actions { grid-column: 1 / -1; }
+    .march-table .c-name input, .march-table .c-pct input, .march-table .c-size input { width: 100%; }
+    .march-table .c-actions::before { content: none; }
+    .icon-btns { gap: 0.4rem; }
+    .icon-btn { min-width: 2.75rem; min-height: 2.5rem; }
+    .share { margin-left: 0; }
+  }
+
+  .totals { margin-top: 1rem; max-width: 34rem; }
+  .totals tbody th { font-weight: 600; text-align: left; white-space: normal; }
+
+  .tokens { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.6rem; }
+  .tok { width: 2.1rem; height: 2.45rem; overflow: visible; }
+  .tok use { fill: transparent; stroke: var(--muted); stroke-width: 1.4; stroke-dasharray: 2.5 2; }
+  .tok text { font: 700 10px "Source Sans 3", system-ui, sans-serif; fill: var(--muted); }
+  .tok.ok use { fill: var(--crest-gold); stroke: var(--crest-gold); stroke-dasharray: none; }
+  .tok.ok text { fill: var(--tok-ink); }
+  .tok.short use { fill: transparent; stroke: var(--err-ink); stroke-width: 1.8; stroke-dasharray: none; }
+  .tok.short text { fill: var(--err-ink); }
   .verdict { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.25rem; }
   .verdict .num {
     font-family: "Cinzel", Georgia, serif;
@@ -173,34 +273,63 @@
   .note { border-radius: 4px; padding: 0.6rem 0.8rem; margin: 0.75rem 0 0; }
   .note.warn { background: var(--warn-bg); color: var(--warn-ink); }
   .note.err { background: var(--err-bg); color: var(--err-ink); }
+  .note button { margin-top: 0.5rem; }
 
   .pools { margin-top: 0.5rem; }
   .pool { margin-bottom: 0.9rem; }
   .pool-head { display: flex; justify-content: space-between; gap: 0.5rem; font-size: 0.95rem; flex-wrap: wrap; }
   .pool-head strong { display: flex; align-items: center; gap: 0.45rem; }
   .limit-tag { font-weight: 700; color: var(--err-ink); }
-  .bar {
-    height: 1.6rem;
-    background: var(--track);
-    border-radius: 3px;
-    overflow: hidden;
-    display: flex;
-    margin-top: 0.25rem;
+  .bar { height: 1.6rem; display: flex; margin-top: 0.25rem; }
+  .bar .have { height: 100%; background: var(--track); border-radius: 3px 0 0 3px; overflow: hidden; display: flex; flex: none; }
+  .bar .over {
+    height: 100%; flex: none; border-radius: 0 3px 3px 0;
+    background: repeating-linear-gradient(45deg, var(--err-ink) 0 4px, transparent 4px 8px);
+    box-shadow: inset 0 0 0 1px var(--err-ink);
   }
+  .bar .over.none { display: none; }
+  .bar .have.full { border-radius: 3px; }
+  .short-tag { font-weight: 700; color: var(--err-ink); }
   .seg { height: 100%; border-right: 2px solid var(--surface); flex: none; }
   .seg.inf { background: var(--inf); } .seg.cav { background: var(--cav); } .seg.arc { background: var(--arc); }
 
-  footer { max-width: 1040px; margin: 0 auto; padding: 0 1.25rem 2rem; color: var(--muted); font-size: 0.9rem; }
+  .copy-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.6rem; border-top: 1px solid var(--line); margin-top: 1.25rem; padding-top: 1rem; }
+
+  footer { max-width: 1120px; margin: 0 auto; padding: 0 1.25rem 2rem; color: var(--muted); font-size: 0.9rem; }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  @media (prefers-reduced-motion: no-preference) { .seg { transition: width 0.2s ease; } }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .seg, .rbar span, .bar .have, .bar .over { transition: width 0.3s ease; }
+    .tok use { transition: fill 0.25s ease, stroke 0.25s ease; }
+    .tok.pop { animation: pop 0.35s ease; transform-origin: 50% 60%; }
+    @keyframes pop { 0% { transform: scale(0.75); } 60% { transform: scale(1.15); } 100% { transform: scale(1); } }
+  }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-inf" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l8 3v6c0 5.2-3.4 9.4-8 11-4.6-1.6-8-5.8-8-11V5l8-3z"/><path fill="none" stroke="var(--surface)" stroke-width="1.6" d="M12 6v12M7.5 11h9"/></symbol>
+    <symbol id="i-cav" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" d="M6 3.5v7.5a6 6 0 0 0 12 0V3.5"/><circle cx="6" cy="9" r="0.9" fill="var(--surface)"/><circle cx="18" cy="9" r="0.9" fill="var(--surface)"/><circle cx="8" cy="15" r="0.9" fill="var(--surface)"/><circle cx="16" cy="15" r="0.9" fill="var(--surface)"/></symbol>
+    <symbol id="i-arc" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" d="M7 2.5c7 3.5 7 15.5 0 19"/><path fill="none" stroke="currentColor" stroke-width="1.2" d="M7 2.5v19"/><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M3.5 12h17M17 8.5l3.5 3.5-3.5 3.5"/></symbol>
+    <symbol id="i-token" viewBox="0 0 24 28"><path d="M12 1.5l9.5 3.5v7.5c0 6.3-4 11.4-9.5 13.5-5.5-2.1-9.5-7.2-9.5-13.5V5L12 1.5z"/></symbol>
+  </defs>
+</svg>
 <header>
   <div class="wrap">
-    <p class="alliance">[RDK]RoadKill</p>
-    <h1>Bear Trap March Planner</h1>
-    <p>Enter your troops and march size, choose how many marches you're sending, and set the ratio for each one. See which marches you can fill and where you come up short.</p>
+    <svg class="crest" viewBox="0 0 100 118" role="img" aria-label="RDK alliance crest">
+      <path d="M50 3l43 15v31c0 30-18 54-43 66C25 103 7 79 7 49V18L50 3z" fill="var(--crest-gold)"/>
+      <path d="M50 10l36 12.5V49c0 26-15.5 47-36 57.5C29.5 96 14 75 14 49V22.5L50 10z" fill="#141B30"/>
+      <path d="M14 44L50 30l36 14v7L50 37 14 51z" fill="var(--crest-gold)" opacity="0.9"/>
+      <path d="M50 88l6 6-6 6-6-6z" fill="var(--crest-gold)"/>
+      <text x="50" y="76" text-anchor="middle" font-family="Cinzel, Georgia, serif" font-weight="700" font-size="24" fill="#F3E7C2" letter-spacing="1">RDK</text>
+    </svg>
+    <div class="head-text">
+      <p class="alliance">[RDK]RoadKill</p>
+      <h1>Bear Trap March Planner</h1>
+      <p>Enter your troops and march size, set up your marches, and see which ones you can fill at their ratios and where you come up short.</p>
+    </div>
+    <button type="button" class="theme-btn" id="theme-toggle"></button>
   </div>
 </header>
 
@@ -211,105 +340,203 @@
       <fieldset>
         <legend>Total troops available</legend>
         <div class="row">
-          <label for="t-inf"><span class="swatch sw-inf" aria-hidden="true"></span>Infantry</label>
-          <input type="text" inputmode="numeric" id="t-inf" value="60,000" autocomplete="off">
+          <label for="t-inf"><svg class="ticon t-inf" aria-hidden="true" focusable="false"><use href="#i-inf"/></svg>Infantry</label>
+          <div><input type="text" inputmode="decimal" id="t-inf" autocomplete="off" aria-describedby="pv-inf troop-hint"><span class="parsed" id="pv-inf"></span></div>
         </div>
         <div class="row">
-          <label for="t-cav"><span class="swatch sw-cav" aria-hidden="true"></span>Cavalry</label>
-          <input type="text" inputmode="numeric" id="t-cav" value="55,000" autocomplete="off">
+          <label for="t-cav"><svg class="ticon t-cav" aria-hidden="true" focusable="false"><use href="#i-cav"/></svg>Cavalry</label>
+          <div><input type="text" inputmode="decimal" id="t-cav" autocomplete="off" aria-describedby="pv-cav troop-hint"><span class="parsed" id="pv-cav"></span></div>
         </div>
         <div class="row">
-          <label for="t-arc"><span class="swatch sw-arc" aria-hidden="true"></span>Archers</label>
-          <input type="text" inputmode="numeric" id="t-arc" value="180,000" autocomplete="off">
+          <label for="t-arc"><svg class="ticon t-arc" aria-hidden="true" focusable="false"><use href="#i-arc"/></svg>Archers</label>
+          <div><input type="text" inputmode="decimal" id="t-arc" autocomplete="off" aria-describedby="pv-arc troop-hint"><span class="parsed" id="pv-arc"></span></div>
         </div>
-        <p class="hint">Count only troops at home and available to march. Commas are fine.</p>
+        <p class="hint" id="troop-hint">Count only troops at home and available to march. You can type 60000, 60,000, 60k or 1.2m.</p>
       </fieldset>
       <fieldset>
-        <legend>March size</legend>
+        <legend>Default march size</legend>
         <div class="row">
           <label for="m-size">Troops</label>
-          <input type="text" inputmode="numeric" id="m-size" value="60,000" autocomplete="off" aria-describedby="m-size-hint">
+          <div><input type="text" inputmode="decimal" id="m-size" autocomplete="off" aria-describedby="pv-size m-size-hint"><span class="parsed" id="pv-size"></span></div>
         </div>
-        <p class="hint" id="m-size-hint">Troops per march, including any capacity bonuses.</p>
+        <p class="hint" id="m-size-hint">Troops per march, including capacity bonuses. Any march can use its own size in the table below.</p>
       </fieldset>
+      <div class="savebar">
+        <p class="hint" id="save-note">Your numbers are saved in this browser only.</p>
+        <button type="button" id="reset">Reset to defaults</button>
+      </div>
     </section>
 
     <section aria-labelledby="out-h">
       <h2 id="out-h">Result</h2>
+      <div class="tokens" id="tokens" aria-hidden="true"></div>
       <div id="result" aria-live="polite"></div>
+
       <h3>Troop pools</h3>
       <p class="hint" style="margin-top:0">Each block is one march's share of that troop type. A bar that's nearly full is the type holding you back.</p>
       <div class="pools" id="pools"></div>
+
+
+      <div class="copy-row">
+        <button type="button" class="primary" id="copy-summary">Copy summary for chat</button>
+        <span class="status-msg" id="copy-status" role="status"></span>
+      </div>
     </section>
   </div>
 
   <section aria-labelledby="ratio-h">
-    <h2 id="ratio-h">March ratios</h2>
-    <div class="ratio-controls">
-      <label for="m-count">Number of marches
-        <select id="m-count"></select>
-      </label>
-      <div class="presets" role="group" aria-label="Apply a ratio to all marches">
+    <h2 id="ratio-h">Marches</h2>
+
+    <div class="plan-banner" id="plan-banner" hidden>
+      <p>Ratios set by your rally leader. Enter your own troops and march size; the ratios stay locked.</p>
+      <button type="button" id="unlock">Edit ratios myself</button>
+    </div>
+
+    <div class="controls">
+      <label for="m-count">Number of marches <select id="m-count"></select></label>
+      <div class="presets" id="presets" role="group" aria-label="Apply a ratio to all marches">
         <span>Apply to all:</span>
         <button type="button" data-p="10,10,80">10 / 10 / 80</button>
         <button type="button" data-p="1,10,89">1 / 10 / 89</button>
         <button type="button" data-p="15,15,70">15 / 15 / 70</button>
         <button type="button" data-p="25,25,50">25 / 25 / 50</button>
       </div>
+      <div class="share">
+        <button type="button" id="copy-link">Copy leader link</button>
+        <span class="status-msg" id="link-status" role="status"></span>
+      </div>
     </div>
-    <p class="hint" style="margin:0 0 0.75rem">Marches are filled in order, so put the ones that matter most at the top.</p>
+    <p class="hint" style="margin:0 0 0.75rem">Fill in any two troop types and the third fills in automatically with whatever is left of 100%. Typing in that box makes the type you touched least recently the automatic one. Marches are filled from the top down, so put the ones that matter most first. Leave a march's size blank to use the default. The leader link shares names and ratios, not troops.</p>
+
     <div class="table-scroll">
-      <table class="ratio-table">
-        <caption class="sr-only">Ratio and troops for each march</caption>
+      <table class="march-table" id="march-table">
+        <caption class="sr-only">Marches with their ratio, size, troops sent and status</caption>
         <thead>
           <tr>
             <th scope="col">March</th>
-            <th scope="col"><span class="swatch sw-inf" aria-hidden="true"></span>Infantry %</th>
-            <th scope="col"><span class="swatch sw-cav" aria-hidden="true"></span>Cavalry %</th>
-            <th scope="col"><span class="swatch sw-arc" aria-hidden="true"></span>Archers %</th>
-            <th scope="col">Total</th>
+            <th scope="col"><svg class="ticon t-inf" aria-hidden="true" focusable="false"><use href="#i-inf"/></svg>Inf %</th>
+            <th scope="col"><svg class="ticon t-cav" aria-hidden="true" focusable="false"><use href="#i-cav"/></svg>Cav %</th>
+            <th scope="col"><svg class="ticon t-arc" aria-hidden="true" focusable="false"><use href="#i-arc"/></svg>Arch %</th>
+            <th scope="col">Size</th>
             <th scope="col">Infantry</th>
             <th scope="col">Cavalry</th>
             <th scope="col">Archers</th>
-            <th scope="col">Status</th>
+            <th scope="col" style="text-align:left">Status</th>
+            <th scope="col" class="h-actions"><span class="sr-only">Actions</span></th>
           </tr>
         </thead>
-        <tbody id="ratio-body"></tbody>
-        <tfoot id="ratio-foot"></tfoot>
+        <tbody id="march-body"></tbody>
+      </table>
+    </div>
+
+    <div class="table-scroll">
+      <table class="totals">
+        <caption class="sr-only">Troop totals</caption>
+        <thead><tr><th scope="col"><span class="sr-only">Total</span></th><th scope="col">Infantry</th><th scope="col">Cavalry</th><th scope="col">Archers</th></tr></thead>
+        <tbody id="totals-body"></tbody>
       </table>
     </div>
   </section>
 </main>
 <footer>
-  <p>Troop counts are rounded to whole troops so each march adds up to exactly your march size. This tool only does the troop math; it does not estimate damage.</p>
+  <p>Troop counts are rounded to whole troops so each march adds up to exactly its size. This tool only does the troop math; it does not estimate damage. Saved numbers stay in your browser and are never sent anywhere.</p>
 </footer>
 
 <script>
 (function () {
+  "use strict";
   var TYPES = [
-    { key: "inf", name: "Infantry" },
-    { key: "cav", name: "Cavalry" },
-    { key: "arc", name: "Archers" }
+    { key: "inf", name: "Infantry", short: "inf" },
+    { key: "cav", name: "Cavalry", short: "cav" },
+    { key: "arc", name: "Archers", short: "arch" }
   ];
-  var MAX_MARCHES = 10;
+  var MAX = 10;
+  var KEY = "rdk-bear-trap-planner-v2";
+  var OLD_KEY = "rdk-bear-trap-planner-v1";
+  var ALLIANCE = "[RDK]RoadKill";
+  var DEF = { inf: "60,000", cav: "55,000", arc: "180,000", size: "60,000", count: 4, ratio: ["", "", ""] };
+  var KEYS = ["inf", "cav", "arc"];
+
   var $ = function (id) { return document.getElementById(id); };
   var fmt = function (n) { return Math.round(n).toLocaleString("en-US"); };
-
-  // Ratio state for every possible march, so values survive changing the count.
-  var ratios = [];
-  for (var r = 0; r < MAX_MARCHES; r++) ratios.push(["10", "10", "80"]);
-
-  function parseNum(str, allowDecimal) {
-    var raw = String(str).replace(/[^0-9.]/g, "");
-    var v = allowDecimal ? parseFloat(raw) : Math.floor(parseFloat(raw));
-    return isFinite(v) && v > 0 ? v : 0;
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
   }
-  function num(id) { return parseNum($(id).value, false); }
 
-  // Split a march size into whole troops by percentage (largest remainder), summing exactly to size.
+  function newMarch(from) {
+    return from ? { name: "", inf: from.inf, cav: from.cav, arc: from.arc, last: from.last.slice(), size: from.size }
+                : { name: "", inf: DEF.ratio[0], cav: DEF.ratio[1], arc: DEF.ratio[2], last: ["inf", "cav"], size: "" };
+  }
+
+  // ---------- Auto-fill: the type touched least recently fills itself ----------
+  function autoKey(o) {
+    for (var k = 0; k < 3; k++) if (o.last.indexOf(KEYS[k]) < 0) return KEYS[k];
+    return "arc";
+  }
+  function touch(o, f) {
+    var i = o.last.indexOf(f);
+    if (i >= 0) { o.last.splice(i, 1); o.last.push(f); }
+    else { o.last = [o.last[o.last.length - 1], f]; }
+  }
+  function cleanLast(last) {
+    return Array.isArray(last) && last.length === 2 && last[0] !== last[1] &&
+      last.every(function (k) { return KEYS.indexOf(k) >= 0; }) ? last.slice() : ["inf", "cav"];
+  }
+  // Works out the automatic type, writes its value back, and reports validity.
+  function resolve(o) {
+    var auto = autoKey(o), p = {}, okF = {}, sum = 0, allOk = true, blank = false;
+    KEYS.forEach(function (k) {
+      if (k === auto) return;
+      if (String(o[k] == null ? "" : o[k]).trim() === "") { blank = true; p[k] = 0; okF[k] = true; return; }
+      var r = parsePct(o[k]);
+      p[k] = r.v; okF[k] = r.ok; sum += r.v;
+      if (!r.ok) allOk = false;
+    });
+    var v = Math.round((100 - sum) * 100) / 100;
+    // The third type only fills in once the other two have been entered.
+    var ok = !blank && allOk && v >= 0;
+    p[auto] = ok ? v : 0;
+    okF[auto] = true;
+    o[auto] = ok ? String(v) : "";
+    return { p: [p.inf, p.cav, p.arc], ok: ok, okF: okF, auto: auto, blank: blank, over: !blank && allOk && v < 0 };
+  }
+  function defaultMarches() {
+    var list = [];
+    for (var i = 0; i < DEF.count; i++) list.push(newMarch());
+    return list;
+  }
+
+  var state = {
+    troops: { inf: DEF.inf, cav: DEF.cav, arc: DEF.arc },
+    size: DEF.size,
+    marches: defaultMarches(),
+    locked: false
+  };
+  var last = null; // last calculation, used for the summary and buttons
+
+  // ---------- Parsing ----------
+  function parseTroops(str) {
+    var t = String(str == null ? "" : str).trim().toLowerCase().replace(/[,\s_]/g, "");
+    if (t === "") return { v: 0, ok: true, empty: true, short: false };
+    var m = t.match(/^(\d+(?:\.\d+)?|\.\d+)([km])?$/);
+    if (!m) return { v: 0, ok: false, empty: false, short: false };
+    var mult = m[2] === "k" ? 1e3 : m[2] === "m" ? 1e6 : 1;
+    return { v: Math.floor(parseFloat(m[1]) * mult), ok: true, empty: false, short: !!m[2] };
+  }
+  function parsePct(str) {
+    var t = String(str == null ? "" : str).trim().replace(/%/g, "");
+    if (t === "") return { v: 0, ok: true };
+    var v = Number(t);
+    if (!isFinite(v) || v < 0 || v > 100) return { v: 0, ok: false };
+    return { v: v, ok: true };
+  }
+
+  // ---------- Math ----------
   function split(size, pcts) {
     var total = pcts[0] + pcts[1] + pcts[2];
-    if (total <= 0) return [0, 0, 0];
+    if (total <= 0 || size <= 0) return [0, 0, 0];
     var raw = pcts.map(function (p) { return size * p / total; });
     var out = raw.map(Math.floor);
     var rem = size - (out[0] + out[1] + out[2]);
@@ -319,88 +546,285 @@
     for (var k = 0; k < rem && order.length; k++) out[order[k % order.length].i]++;
     return out;
   }
-
-  // Largest single march size where every listed march (at its own ratio) fits in the pools together.
-  function maxCommonSize(pctList, have) {
-    var s = Infinity;
-    for (var t = 0; t < 3; t++) {
-      var share = 0;
-      pctList.forEach(function (p) { share += p[t] / 100; });
-      if (share > 0) s = Math.min(s, Math.floor(have[t] / share));
+  function fitsAll(list, have) {
+    var need = [0, 0, 0];
+    list.forEach(function (r) {
+      var c = split(r.size, r.p);
+      need[0] += c[0]; need[1] += c[1]; need[2] += c[2];
+    });
+    return need[0] <= have[0] && need[1] <= have[1] && need[2] <= have[2];
+  }
+  // Largest scale (in hundredths of a percent) where every march, shrunk by the same factor, fits together.
+  function bestScale(rows, have) {
+    function ok(f) {
+      return fitsAll(rows.map(function (r) { return { size: Math.floor(r.size * f / 10000), p: r.p }; }), have);
     }
-    if (!isFinite(s)) return 0;
-    while (s > 0) {
-      var need = [0, 0, 0];
-      pctList.forEach(function (p) { var c = split(s, p); need[0] += c[0]; need[1] += c[1]; need[2] += c[2]; });
-      if (need[0] <= have[0] && need[1] <= have[1] && need[2] <= have[2]) break;
-      s--;
+    var lo = 0, hi = 10000;
+    while (lo < hi) {
+      var mid = Math.ceil((lo + hi) / 2);
+      if (ok(mid)) lo = mid; else hi = mid - 1;
     }
-    return s;
+    return lo;
   }
 
+  // ---------- Storage ----------
+  function validMarch(m) {
+    return m && typeof m === "object" && ["name", "inf", "cav", "arc", "size"].every(function (k) {
+      return m[k] === undefined || typeof m[k] === "string";
+    });
+  }
+  function cleanMarch(m) {
+    return { name: (m.name || "").slice(0, 30), inf: m.inf || "", cav: m.cav || "", arc: m.arc || "",
+             last: m.arc === undefined ? ["inf", "cav"] : cleanLast(m.last), size: m.size || "" };
+  }
+  function save() {
+    try {
+      var marches = state.marches;
+      if (state.locked) {
+        var prev = null;
+        try { prev = JSON.parse(localStorage.getItem(KEY)); } catch (e) { prev = null; }
+        marches = prev && Array.isArray(prev.marches) ? prev.marches : null;
+      }
+      localStorage.setItem(KEY, JSON.stringify({
+        troops: state.troops, size: state.size, marches: marches
+      }));
+    } catch (e) { /* storage blocked: page still works, it just won't remember */ }
+  }
+  function load() {
+    var data = null;
+    try { data = JSON.parse(localStorage.getItem(KEY)); } catch (e) { data = null; }
+    if (!data) {
+      // Bring over numbers saved by the previous version of this page.
+      var old = null;
+      try { old = JSON.parse(localStorage.getItem(OLD_KEY)); } catch (e) { old = null; }
+      if (old && typeof old === "object") {
+        data = { troops: { inf: old.inf, cav: old.cav, arc: old.arc }, size: old.size, marches: null };
+        if (Array.isArray(old.ratios)) {
+          var n = parseInt(old.count, 10);
+          if (!(n >= 1 && n <= MAX)) n = DEF.count;
+          data.marches = old.ratios.slice(0, n).map(function (r) {
+            return { name: "", inf: String(r[0] || ""), cav: String(r[1] || ""), arc: "", size: "" };
+          });
+        }
+      }
+    }
+    if (!data || typeof data !== "object") return;
+    if (data.troops && typeof data.troops === "object") {
+      ["inf", "cav", "arc"].forEach(function (k) { if (typeof data.troops[k] === "string") state.troops[k] = data.troops[k]; });
+    }
+    if (typeof data.size === "string") state.size = data.size;
+    if (Array.isArray(data.marches) && data.marches.length >= 1 && data.marches.length <= MAX && data.marches.every(validMarch)) {
+      state.marches = data.marches.map(cleanMarch);
+    }
+  }
+
+  // ---------- Leader link ----------
+  function b64url(s) {
+    return btoa(unescape(encodeURIComponent(s))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+  function unb64url(s) {
+    s = s.replace(/-/g, "+").replace(/_/g, "/");
+    while (s.length % 4) s += "=";
+    return decodeURIComponent(escape(atob(s)));
+  }
+  function planLink() {
+    var data = { v: 2, m: state.marches.map(function (m) { return [m.name, m.inf, m.cav, m.arc, autoKey(m)]; }) };
+    return location.origin + location.pathname + "?plan=" + b64url(JSON.stringify(data));
+  }
+  function readPlan() {
+    var q;
+    try { q = new URLSearchParams(location.search).get("plan"); } catch (e) { q = null; }
+    if (!q) return null;
+    try {
+      var d = JSON.parse(unb64url(q));
+      if (!d || !Array.isArray(d.m) || d.m.length < 1 || d.m.length > MAX) return null;
+      var ok = d.m.every(function (r) {
+        return Array.isArray(r) && (r.length === 3 || r.length === 5) &&
+          r.every(function (x) { return typeof x === "string" && x.length <= 30; });
+      });
+      if (!ok) return null;
+      return d.m.map(function (r) {
+        if (r.length === 3) return { name: r[0], inf: r[1], cav: r[2], arc: "", last: ["inf", "cav"], size: "" };
+        var auto = KEYS.indexOf(r[4]) >= 0 ? r[4] : "arc";
+        return { name: r[0], inf: r[1], cav: r[2], arc: r[3], last: KEYS.filter(function (k) { return k !== auto; }), size: "" };
+      });
+    } catch (e) { return null; }
+  }
+
+  // ---------- Clipboard ----------
+  function flash(el, msg) {
+    el.textContent = msg;
+    clearTimeout(el._t);
+    el._t = setTimeout(function () { el.textContent = ""; }, 4000);
+  }
+  function copyText(text, statusEl, okMsg) {
+    function fallback() {
+      var ta = document.createElement("textarea");
+      ta.value = text;
+      ta.setAttribute("readonly", "");
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+      document.body.removeChild(ta);
+      if (ok) flash(statusEl, okMsg);
+      else window.prompt("Copy this:", text);
+    }
+    if (navigator.clipboard && window.isSecureContext) {
+      navigator.clipboard.writeText(text).then(function () { flash(statusEl, okMsg); }, fallback);
+    } else {
+      fallback();
+    }
+  }
+
+  // ---------- Building the march rows ----------
   function buildCountSelect() {
     var sel = $("m-count");
-    for (var i = 1; i <= MAX_MARCHES; i++) {
+    for (var i = 1; i <= MAX; i++) {
       var o = document.createElement("option");
-      o.value = i; o.textContent = i;
-      if (i === 4) o.selected = true;
+      o.value = String(i);
+      o.textContent = String(i);
       sel.appendChild(o);
     }
   }
 
-  function buildRows() {
-    var n = parseInt($("m-count").value, 10);
-    var body = "";
-    for (var i = 0; i < n; i++) {
-      body += "<tr><th scope=\"row\">March " + (i + 1) + "</th>";
-      TYPES.forEach(function (t, k) {
-        body += '<td><input type="text" inputmode="decimal" autocomplete="off" data-row="' + i + '" data-col="' + k +
-          '" value="' + ratios[i][k] + '" aria-label="March ' + (i + 1) + " " + t.name.toLowerCase() + ' percent"></td>';
-      });
-      body += '<td class="sumcell" id="sum-' + i + '"></td>';
-      body += '<td id="c-' + i + '-0"></td><td id="c-' + i + '-1"></td><td id="c-' + i + '-2"></td>';
-      body += '<td id="st-' + i + '"></td></tr>';
-    }
-    $("ratio-body").innerHTML = body;
-    $("ratio-body").querySelectorAll("input").forEach(function (el) {
-      el.addEventListener("input", function () {
-        ratios[+el.dataset.row][+el.dataset.col] = el.value;
-        render();
-      });
+  function buildRows(focus) {
+    var n = state.marches.length;
+    $("m-count").value = String(n);
+    $("m-count").disabled = state.locked;
+    $("presets").hidden = state.locked;
+    $("plan-banner").hidden = !state.locked;
+    $("march-table").classList.toggle("locked", state.locked);
+
+    var ro = state.locked ? " readonly" : "";
+    var html = "";
+    state.marches.forEach(function (m, i) {
+      var label = "March " + (i + 1);
+      html += "<tr>";
+      html += '<td class="c-name" data-label="' + label + '"><input type="text" maxlength="30" data-i="' + i + '" data-f="name" value="' +
+        esc(m.name) + '" placeholder="' + label + '" aria-label="' + label + ' name"' + ro + ">" +
+        '<div class="rbar" id="rb-' + i + '" aria-hidden="true"><span class="inf"></span><span class="cav"></span><span class="arc"></span></div></td>';
+      html += '<td class="c-pct" data-label="Infantry %"><input type="text" inputmode="decimal" data-i="' + i + '" data-f="inf" value="' +
+        esc(m.inf) + '" aria-label="' + label + ' infantry percent"' + ro + "></td>";
+      html += '<td class="c-pct" data-label="Cavalry %"><input type="text" inputmode="decimal" data-i="' + i + '" data-f="cav" value="' +
+        esc(m.cav) + '" aria-label="' + label + ' cavalry percent"' + ro + "></td>";
+      html += '<td class="c-pct" data-label="Archers %"><input type="text" inputmode="decimal" data-i="' + i + '" data-f="arc" value="' +
+        esc(m.arc) + '" aria-label="' + label + ' archers percent"' + ro + "></td>";
+      html += '<td class="c-size" data-label="March size"><input type="text" inputmode="decimal" data-i="' + i + '" data-f="size" value="' +
+        esc(m.size) + '" aria-label="' + label + ' size, leave blank for default"></td>';
+      html += '<td data-label="Infantry" id="c-' + i + '-0"></td>';
+      html += '<td data-label="Cavalry" id="c-' + i + '-1"></td>';
+      html += '<td data-label="Archers" id="c-' + i + '-2"></td>';
+      html += '<td class="c-status" data-label="Status" id="st-' + i + '"></td>';
+      html += '<td class="c-actions">';
+      if (!state.locked) {
+        html += '<span class="icon-btns">' +
+          btn("up", i, "Move " + label + " up", "↑", i === 0) +
+          btn("down", i, "Move " + label + " down", "↓", i === n - 1) +
+          btn("dup", i, "Duplicate " + label, "⧉", n >= MAX) +
+          btn("del", i, "Remove " + label, "✕", n <= 1) +
+          "</span>";
+      }
+      html += "</td></tr>";
     });
+    $("march-body").innerHTML = html;
+
+    if (focus) {
+      var el = document.querySelector('#march-body [data-act="' + focus.act + '"][data-i="' + focus.i + '"]');
+      if (el && el.disabled) el = document.querySelector('#march-body [data-f="name"][data-i="' + focus.i + '"]');
+      if (el) el.focus();
+    }
     render();
+  }
+  function btn(act, i, label, glyph, disabled) {
+    return '<button type="button" class="icon-btn" data-act="' + act + '" data-i="' + i + '" aria-label="' + label +
+      '" title="' + label + '"' + (disabled ? " disabled" : "") + '><span aria-hidden="true">' + glyph + "</span></button>";
+  }
+
+  // ---------- Main calculation ----------
+  function rowInfo(defSize) {
+    return state.marches.map(function (m, i) {
+      var res = resolve(m);
+      var ratioOk = res.ok;
+      var sz = String(m.size).trim() === "" ? { v: defSize, ok: true, useDef: true } : parseTroops(m.size);
+      var sizeOk = sz.ok && sz.v > 0;
+      return {
+        i: i, name: m.name.trim() || ("March " + (i + 1)),
+        p: res.p, res: res, ratioOk: ratioOk,
+        size: sz.v, sizeInputOk: sz.ok, useDef: !!sz.useDef, sizeOk: sizeOk,
+        valid: ratioOk && sizeOk
+      };
+    });
+  }
+
+  function showParsed(inputId, outId, parsed) {
+    var input = $(inputId), out = $(outId);
+    input.setAttribute("aria-invalid", parsed.ok ? "false" : "true");
+    if (!parsed.ok) { out.textContent = "Use a number like 60000, 60k or 1.2m."; out.className = "parsed bad"; }
+    else if (parsed.short) { out.textContent = "= " + fmt(parsed.v); out.className = "parsed"; }
+    else { out.textContent = ""; out.className = "parsed"; }
+  }
+
+  // Shows the current value, auto styling and error state on one percentage box.
+  function paintPct(el, label, k, res, o) {
+    if (!el) return;
+    var isAuto = k === res.auto;
+    el.classList.toggle("is-auto", isAuto);
+    el.setAttribute("aria-label", label + (isAuto ? ", filled automatically" : ""));
+    if (isAuto) {
+      if (document.activeElement !== el && el.value !== o[k]) el.value = o[k];
+      el.placeholder = res.over ? "Over" : "";
+      el.setAttribute("aria-invalid", res.over ? "true" : "false");
+    } else {
+      el.setAttribute("aria-invalid", res.okF[k] && !res.over ? "false" : "true");
+    }
   }
 
   function render() {
-    var have = [num("t-inf"), num("t-cav"), num("t-arc")];
-    var size = num("m-size");
-    var n = parseInt($("m-count").value, 10);
+    var pt = [parseTroops(state.troops.inf), parseTroops(state.troops.cav), parseTroops(state.troops.arc)];
+    showParsed("t-inf", "pv-inf", pt[0]);
+    showParsed("t-cav", "pv-cav", pt[1]);
+    showParsed("t-arc", "pv-arc", pt[2]);
+    var have = pt.map(function (p) { return p.v; });
+    var ps = parseTroops(state.size);
+    showParsed("m-size", "pv-size", ps);
+    var defSize = ps.v;
 
+    document.querySelectorAll('#march-body [data-f="size"]').forEach(function (el) {
+      el.placeholder = defSize > 0 ? fmt(defSize) : "Size";
+    });
+
+    var rows = rowInfo(defSize);
     var remaining = have.slice();
-    var used = [0, 0, 0];
-    var demand = [0, 0, 0];
-    var sent = 0, invalid = 0;
-    var sentPer = [];           // per-type counts of marches that were sent, for the bars
-    var validPcts = [];
-    var failTypes = [0, 0, 0];
+    var used = [0, 0, 0], demand = [0, 0, 0];
+    var sent = 0, invalid = 0, blankCount = 0, sentPer = [], validRows = [];
 
-    for (var i = 0; i < n; i++) {
-      var p = ratios[i].map(function (v) { return parseNum(v, true); });
-      var total = Math.round((p[0] + p[1] + p[2]) * 100) / 100;
-      var ok = Math.abs(total - 100) < 0.001;
-      var sumEl = $("sum-" + i);
-      sumEl.textContent = total + "%";
-      sumEl.className = "sumcell" + (ok ? "" : " bad");
+    rows.forEach(function (r) {
+      var i = r.i;
+      var q = function (f) { return document.querySelector('#march-body [data-i="' + i + '"][data-f="' + f + '"]'); };
+      KEYS.forEach(function (k, t) { paintPct(q(k), "March " + (i + 1) + " " + TYPES[t].name.toLowerCase() + " percent", k, r.res, state.marches[i]); });
+      if (q("size")) q("size").setAttribute("aria-invalid", r.sizeInputOk ? "false" : "true");
+
       var st = $("st-" + i);
-
-      if (!ok || size <= 0) {
+      var bars = $("rb-" + i).children;
+      for (var b = 0; b < 3; b++) bars[b].style.width = (r.ratioOk ? r.p[b] : 0) + "%";
+      var tr = st.parentElement;
+      r.counts = [0, 0, 0];
+      r.status = "invalid";
+      if (!r.valid) {
         for (var k = 0; k < 3; k++) $("c-" + i + "-" + k).textContent = "–";
-        st.innerHTML = '<span class="status-skip">' + (!ok ? "Fix ratio" : "Set march size") + "</span>";
-        if (!ok) invalid++;
-        continue;
+        var why = !r.ratioOk ? (r.res.blank ? "Enter ratio" : r.res.over ? "Over 100%" : "Fix ratio") : (!r.sizeInputOk ? "Check size" : "Set a march size");
+        st.innerHTML = '<span class="status-skip">' + why + "</span>";
+        tr.className = "";
+        r.why = why;
+        if (r.res.blank && r.sizeInputOk) blankCount++; else invalid++;
+        return;
       }
-      validPcts.push(p);
-      var c = split(size, p);
+      validRows.push(r);
+      var c = split(r.size, r.p);
+      r.counts = c;
       for (var t = 0; t < 3; t++) { $("c-" + i + "-" + t).textContent = fmt(c[t]); demand[t] += c[t]; }
 
       var short = [];
@@ -409,91 +833,263 @@
         for (t = 0; t < 3; t++) { remaining[t] -= c[t]; used[t] += c[t]; }
         sent++;
         sentPer.push(c);
+        r.status = "ok";
         st.innerHTML = '<span class="status-ok">Can send</span>';
+        tr.className = "row-ok";
       } else {
-        short.forEach(function (t) { failTypes[t]++; });
-        st.innerHTML = '<span class="status-bad">Short ' + short.map(function (t) {
-          return fmt(c[t] - remaining[t]) + " " + TYPES[t].name.toLowerCase();
-        }).join(", ") + "</span>";
+        r.status = "short";
+        r.shortTxt = short.map(function (t) { return fmt(c[t] - remaining[t]) + " " + TYPES[t].name.toLowerCase(); }).join(", ");
+        st.innerHTML = '<span class="status-bad">Short ' + r.shortTxt + "</span>";
+        tr.className = "row-short";
       }
-    }
+    });
 
-    // Footer totals
-    var foot = "<tr><th scope=\"row\" colspan=\"5\">Needed for all marches</th>" +
-      demand.map(function (d) { return "<td>" + fmt(d) + "</td>"; }).join("") + "<td></td></tr>";
-    foot += "<tr><th scope=\"row\" colspan=\"5\">You have</th>" +
-      have.map(function (h) { return "<td>" + fmt(h) + "</td>"; }).join("") + "<td></td></tr>";
-    foot += "<tr><th scope=\"row\" colspan=\"5\">Left after marches you can send</th>" +
-      remaining.map(function (x) { return "<td>" + fmt(x) + "</td>"; }).join("") + "<td></td></tr>";
-    $("ratio-foot").innerHTML = foot;
+    // Totals
+    var tb = "";
+    [["Needed for all marches", demand], ["You have", have], ["Left after marches you can send", remaining]].forEach(function (row) {
+      tb += '<tr><th scope="row">' + row[0] + "</th>" + row[1].map(function (v) { return "<td>" + fmt(v) + "</td>"; }).join("") + "</tr>";
+    });
+    $("totals-body").innerHTML = tb;
 
     // Result panel
-    var result = $("result");
-    if (size <= 0) {
-      result.innerHTML = '<p class="note err">Enter a march size to see which marches you can send.</p>';
-      $("pools").innerHTML = "";
-      return;
-    }
+    var n = rows.length;
     var html = '<div class="verdict"><span class="num">' + sent + " of " + n + '</span><span class="what">march' +
-      (n === 1 ? "" : "es") + " of " + fmt(size) + " troops can be sent</span></div>";
-
-    if (invalid > 0) {
-      html += '<p class="note err">' + invalid + " march" + (invalid === 1 ? " has" : "es have") +
-        " a ratio that doesn't add up to 100%. Fix " + (invalid === 1 ? "it" : "them") + " in the March ratios table.</p>";
+      (n === 1 ? "" : "es") + " can be sent</span></div>";
+    if (blankCount > 0) {
+      html += "<p>Enter a ratio for " + (blankCount === n ? "each march" : blankCount + " more march" + (blankCount === 1 ? "" : "es")) +
+        ", or use one of the Apply to all buttons. Fill in any two troop types and the third fills in automatically.</p>";
     }
-
+    if (invalid > 0) {
+      html += '<p class="note err">' + invalid + " march" + (invalid === 1 ? " needs" : "es need") +
+        " fixing in the Marches table before " + (invalid === 1 ? "it" : "they") + " can be counted.</p>";
+    }
     var shortAll = demand.map(function (d, t) { return Math.max(0, d - have[t]); });
     var shortTxt = shortAll.map(function (s, t) { return s > 0 ? fmt(s) + " more " + TYPES[t].name.toLowerCase() : null; })
       .filter(Boolean).join(" and ");
-    if (validPcts.length > 0 && shortTxt) {
+    var scale = 0, uniform = false, uniformSize = 0;
+    if (validRows.length && shortTxt) {
       html += "<p>To send every march at these ratios you'd need " + shortTxt + ".</p>";
-      var best = maxCommonSize(validPcts, have);
-      if (best > 0) {
-        html += '<p class="note warn">Or keep your ratios and shrink every march to <strong>' + fmt(best) +
-          "</strong> troops, and all " + validPcts.length + " will fit.</p>";
+      uniform = validRows.every(function (r) { return r.useDef; });
+      if (uniform) {
+        var allAt = function (sz) { return fitsAll(validRows.map(function (r) { return { size: sz, p: r.p }; }), have); };
+        uniformSize = Math.floor(defSize * bestScale(validRows, have) / 10000);
+        while (uniformSize > 0 && !allAt(uniformSize)) uniformSize--;
+        while (uniformSize > 0 && uniformSize < defSize && allAt(uniformSize + 1)) uniformSize++;
+        if (uniformSize > 0) {
+          html += '<div class="note warn"><p style="margin:0">Or keep your ratios and shrink every march to <strong>' + fmt(uniformSize) +
+            "</strong> troops, and all " + validRows.length + " fit.</p>" +
+            '<button type="button" data-act="shrink">Shrink marches to fit</button></div>';
+        }
       } else {
-        html += '<p class="note warn">You don\'t have enough troops to send all of these marches at any size with these ratios.</p>';
+        scale = bestScale(validRows, have);
+        if (scale > 0) {
+          html += '<div class="note warn"><p style="margin:0">Or keep your ratios and shrink every march to <strong>' + (Math.floor(scale / 10) / 10) +
+            "%</strong> of its size, and all " + validRows.length + " fit.</p>" +
+            '<button type="button" data-act="shrink">Shrink marches to fit</button></div>';
+        }
       }
-    } else if (validPcts.length > 0 && invalid === 0) {
-      html += "<p>Every march fits with troops to spare.</p>";
+      if ((uniform && uniformSize <= 0) || (!uniform && scale <= 0)) {
+        html += '<p class="note warn">You don\'t have enough troops to send all of these marches at these ratios at any size.</p>';
+      }
+    } else if (validRows.length && invalid === 0 && blankCount === 0) {
+      html += "<p>Every march fits, with troops to spare.</p>";
     }
-    result.innerHTML = html;
+    $("result").innerHTML = html;
 
     // Pool bars
-    var limitT = -1, tightest = -1;
-    for (var t2 = 0; t2 < 3; t2++) {
-      if (have[t2] > 0 && demand[t2] > 0) {
-        var ratio = demand[t2] / have[t2];
-        if (ratio > tightest) { tightest = ratio; limitT = t2; }
-      }
+    var limitT = -1, tight = -1;
+    for (var t3 = 0; t3 < 3; t3++) {
+      if (have[t3] > 0 && demand[t3] > 0 && demand[t3] / have[t3] > tight) { tight = demand[t3] / have[t3]; limitT = t3; }
     }
-    var pools = "";
+    var poolBox = $("pools");
+    if (!poolBox.children.length) {
+      poolBox.innerHTML = TYPES.map(function (t) {
+        return '<div class="pool"><div class="pool-head"><strong><svg class="ticon t-' + t.key + '" aria-hidden="true" focusable="false"><use href="#i-' +
+          t.key + '"/></svg>' + t.name + '<span class="limit-tag" hidden> (tightest)</span></strong><span class="pool-num"></span></div>' +
+          '<div class="bar" role="img"><div class="have"></div><div class="over"></div></div></div>';
+      }).join("");
+    }
     TYPES.forEach(function (t, k) {
-      var isLimit = k === limitT && validPcts.length > 0;
-      pools += '<div class="pool"><div class="pool-head"><strong><span class="swatch sw-' + t.key +
-        '" aria-hidden="true"></span>' + t.name + (isLimit ? ' <span class="limit-tag">(tightest)</span>' : "") +
-        "</strong><span>" + fmt(used[k]) + " of " + fmt(have[k]) + " used</span></div>";
-      pools += '<div class="bar" role="img" aria-label="' + t.name + ": " + fmt(used[k]) + " of " + fmt(have[k]) + ' used">';
-      if (have[k] > 0) {
-        sentPer.forEach(function (c) {
-          if (c[k] > 0) pools += '<span class="seg ' + t.key + '" style="width:' + (c[k] / have[k]) * 100 + '%"></span>';
-        });
-      }
-      pools += "</div></div>";
+      var el = poolBox.children[k];
+      var short = Math.max(0, demand[k] - have[k]);
+      var scaleMax = Math.max(have[k], demand[k], 1);
+      el.querySelector(".limit-tag").hidden = !(k === limitT && validRows.length > 0);
+      el.querySelector(".pool-num").innerHTML = fmt(used[k]) + " of " + fmt(have[k]) + " used" +
+        (short > 0 ? ' · <span class="short-tag">short ' + fmt(short) + "</span>" : "");
+      el.querySelector(".bar").setAttribute("aria-label", t.name + ": " + fmt(used[k]) + " of " + fmt(have[k]) + " used" +
+        (short > 0 ? ", short " + fmt(short) : ""));
+      var haveEl = el.querySelector(".have");
+      haveEl.style.width = (have[k] / scaleMax) * 100 + "%";
+      haveEl.classList.toggle("full", short === 0);
+      haveEl.innerHTML = have[k] > 0 ? sentPer.map(function (c) {
+        return c[k] > 0 ? '<span class="seg ' + t.key + '" style="width:' + (c[k] / have[k]) * 100 + '%"></span>' : "";
+      }).join("") : "";
+      var overEl = el.querySelector(".over");
+      overEl.style.width = (short / scaleMax) * 100 + "%";
+      overEl.classList.toggle("none", short === 0);
     });
-    $("pools").innerHTML = pools;
+
+    // March tokens
+    var tokBox = $("tokens");
+    if (tokBox.children.length !== rows.length) {
+      tokBox.innerHTML = rows.map(function (r, i) {
+        return '<svg class="tok" viewBox="0 0 24 28"><use href="#i-token"/><text x="12" y="17" text-anchor="middle">' + (i + 1) + "</text></svg>";
+      }).join("");
+    }
+    rows.forEach(function (r, i) {
+      var tok = tokBox.children[i];
+      var base = "tok" + (r.status === "ok" ? " ok" : r.status === "short" ? " short" : "");
+      var cur = (tok.getAttribute("class") || "").replace(" pop", "");
+      if (cur !== base) tok.setAttribute("class", base + (r.status === "ok" ? " pop" : ""));
+    });
+
+
+    last = { have: have, rows: rows, sent: sent, shortTxt: shortTxt, defSize: defSize, uniform: uniform,
+             uniformSize: uniformSize, scale: scale };
+    save();
   }
 
-  buildCountSelect();
-  $("m-count").addEventListener("change", buildRows);
-  ["t-inf", "t-cav", "t-arc", "m-size"].forEach(function (id) { $(id).addEventListener("input", render); });
-  document.querySelectorAll(".presets button").forEach(function (b) {
+  // ---------- Summary ----------
+  function summaryText() {
+    if (!last) return "";
+    var lines = [ALLIANCE + " – Bear Trap plan"];
+    lines.push("Troops: " + fmt(last.have[0]) + " inf / " + fmt(last.have[1]) + " cav / " + fmt(last.have[2]) + " arch");
+    last.rows.forEach(function (r, i) {
+      var head = (i + 1) + ". " + r.name;
+      if (r.status === "invalid") { lines.push(head + " – needs fixing (" + r.why.toLowerCase() + ")"); return; }
+      var ratio = r.p.map(function (v) { return String(v); }).join("/");
+      var tail = r.status === "ok" ? "✅ can send" : "❌ short " + r.shortTxt;
+      lines.push(head + " – " + ratio + " × " + fmt(r.size) + " – " + tail);
+    });
+    lines.push("Can send " + last.sent + " of " + last.rows.length + ".");
+    if (last.shortTxt) lines.push("Need " + last.shortTxt + " to send all.");
+    return lines.join("\n");
+  }
+
+  // ---------- Events ----------
+  function bindTroop(id, key) {
+    var el = $(id);
+    el.value = state.troops[key];
+    el.addEventListener("input", function () { state.troops[key] = el.value; render(); });
+  }
+
+  $("march-body").addEventListener("input", function (e) {
+    var el = e.target;
+    if (!el.dataset || el.dataset.f === undefined) return;
+    var m = state.marches[+el.dataset.i];
+    if (!m) return;
+    m[el.dataset.f] = el.value;
+    if (KEYS.indexOf(el.dataset.f) >= 0) touch(m, el.dataset.f);
+    render();
+  });
+
+  $("march-body").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-act]");
+    if (!b || b.disabled || state.locked) return;
+    var i = +b.dataset.i, list = state.marches, act = b.dataset.act;
+    if (act === "up" && i > 0) {
+      var tmp = list[i - 1]; list[i - 1] = list[i]; list[i] = tmp;
+      buildRows({ act: "up", i: i - 1 });
+    } else if (act === "down" && i < list.length - 1) {
+      var tmp2 = list[i + 1]; list[i + 1] = list[i]; list[i] = tmp2;
+      buildRows({ act: "down", i: i + 1 });
+    } else if (act === "dup" && list.length < MAX) {
+      var copy = newMarch(list[i]);
+      list.splice(i + 1, 0, copy);
+      buildRows({ act: "dup", i: i + 1 });
+    } else if (act === "del" && list.length > 1) {
+      list.splice(i, 1);
+      buildRows({ act: "del", i: Math.min(i, list.length - 1) });
+    }
+  });
+
+  $("m-count").addEventListener("change", function () {
+    var n = parseInt($("m-count").value, 10);
+    while (state.marches.length < n) state.marches.push(newMarch());
+    state.marches.length = n;
+    buildRows();
+  });
+
+  document.querySelectorAll("#presets button").forEach(function (b) {
     b.addEventListener("click", function () {
       var p = b.getAttribute("data-p").split(",");
-      for (var i = 0; i < MAX_MARCHES; i++) ratios[i] = p.slice();
+      state.marches.forEach(function (m) { m.inf = p[0]; m.cav = p[1]; m.arc = p[2]; m.last = ["inf", "cav"]; });
       buildRows();
     });
   });
+
+  $("result").addEventListener("click", function (e) {
+    var b = e.target.closest('button[data-act="shrink"]');
+    if (!b || !last) return;
+    if (last.uniform && last.uniformSize > 0) {
+      state.size = fmt(last.uniformSize);
+      $("m-size").value = state.size;
+    } else if (last.scale > 0) {
+      last.rows.forEach(function (r) {
+        if (r.valid) state.marches[r.i].size = fmt(Math.floor(r.size * last.scale / 10000));
+      });
+    }
+    buildRows();
+  });
+
+
+  $("copy-summary").addEventListener("click", function () {
+    copyText(summaryText(), $("copy-status"), "Summary copied.");
+  });
+  $("copy-link").addEventListener("click", function () {
+    copyText(planLink(), $("link-status"), "Leader link copied.");
+  });
+
+  $("unlock").addEventListener("click", function () {
+    state.locked = false;
+    try { history.replaceState(null, "", location.pathname + location.hash); } catch (e) {}
+    buildRows();
+    var el = document.querySelector('#march-body [data-f="name"][data-i="0"]');
+    if (el) el.focus();
+  });
+
+  $("reset").addEventListener("click", function () {
+    if (!window.confirm("Clear your saved numbers and go back to the defaults?")) return;
+    try { localStorage.removeItem(KEY); localStorage.removeItem(OLD_KEY); } catch (e) {}
+    state.troops = { inf: DEF.inf, cav: DEF.cav, arc: DEF.arc };
+    state.size = DEF.size;
+    if (!state.locked) state.marches = defaultMarches();
+    else state.marches.forEach(function (m) { m.size = ""; });
+    $("t-inf").value = state.troops.inf;
+    $("t-cav").value = state.troops.cav;
+    $("t-arc").value = state.troops.arc;
+    $("m-size").value = state.size;
+    buildRows();
+    flash($("save-note"), "Reset to defaults.");
+    setTimeout(function () { $("save-note").textContent = "Your numbers are saved in this browser only."; }, 4100);
+  });
+
+  // ---------- Theme ----------
+  function paintThemeButton() {
+    var light = document.documentElement.getAttribute("data-theme") === "light";
+    var b = $("theme-toggle");
+    b.textContent = light ? "☾ Dark" : "☀ Light";
+    b.setAttribute("aria-label", light ? "Switch to dark theme" : "Switch to light theme");
+  }
+  $("theme-toggle").addEventListener("click", function () {
+    var light = document.documentElement.getAttribute("data-theme") === "light";
+    if (light) document.documentElement.removeAttribute("data-theme");
+    else document.documentElement.setAttribute("data-theme", "light");
+    try { localStorage.setItem("rdk-bear-trap-theme", light ? "dark" : "light"); } catch (e) {}
+    paintThemeButton();
+  });
+  paintThemeButton();
+
+  // ---------- Start ----------
+  buildCountSelect();
+  load();
+  var plan = readPlan();
+  if (plan) { state.marches = plan; state.locked = true; }
+  bindTroop("t-inf", "inf");
+  bindTroop("t-cav", "cav");
+  bindTroop("t-arc", "arc");
+  $("m-size").value = state.size;
+  $("m-size").addEventListener("input", function () { state.size = $("m-size").value; render(); });
   buildRows();
 })();
 </script>
